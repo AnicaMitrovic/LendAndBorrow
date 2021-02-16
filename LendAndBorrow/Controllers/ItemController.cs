@@ -22,5 +22,11 @@ namespace LendAndBorrow.Controllers
             IEnumerable<Item> objectList = _db.Items;
             return View(objectList);
         }
+
+        public IActionResult Create()
+        {
+            IEnumerable<Item> objectList = _db.Items;
+            return View();
+        }
     }
 }
