@@ -33,7 +33,47 @@ namespace LendAndBorrow.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Expense obj)
         {
-            _dbContext.Expenses.Add(obj);
+            if (ModelState.IsValid)
+            {
+                _dbContext.Expenses.Add(obj);
+                _dbContext.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            return View(obj);
+        }
+
+        // Get-Delete
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var obj = _dbContext.Expenses.Find(id);
+
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        // POST-Delete
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePost(int? id)
+        {
+            var obj = _dbContext.Expenses.Find(id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            _dbContext.Expenses.Remove(obj);
             _dbContext.SaveChanges();
 
             return RedirectToAction("Index");
