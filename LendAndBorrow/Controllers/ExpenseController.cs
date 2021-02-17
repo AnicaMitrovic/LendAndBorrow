@@ -78,5 +78,40 @@ namespace LendAndBorrow.Controllers
 
             return RedirectToAction("Index");
         }
+
+
+        // Get-Update
+        public IActionResult Update(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var obj = _dbContext.Expenses.Find(id);
+
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        // POST-Update
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdatePost(Expense obj)
+        {
+            if (ModelState.IsValid)
+            {
+                _dbContext.Expenses.Update(obj);
+                _dbContext.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            return View(obj);
+        }
     }
 }
