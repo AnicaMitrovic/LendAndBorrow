@@ -22,6 +22,12 @@ namespace LendAndBorrow.Controllers
         public IActionResult Index()
         {
             IEnumerable<Expense> objectList = _dbContext.Expenses;
+
+            foreach (var obj in objectList)
+            {
+                obj.ExpenseCategory = _dbContext.Categories.FirstOrDefault(u => u.Id == obj.ExpenseCategoryId);
+            }
+
             return View(objectList);
         }
 
