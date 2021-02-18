@@ -1,5 +1,6 @@
 ﻿using LendAndBorrow.Data;
 using LendAndBorrow.Models;
+using LendAndBorrow.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -26,27 +27,36 @@ namespace LendAndBorrow.Controllers
 
         public IActionResult Create()
         {
-            IEnumerable<SelectListItem> TypeDropDown = _dbContext.Categories.Select(i => new SelectListItem
-            {
-                Text = i.Name,
-                Value = i.Id.ToString()
-            });
+            //IEnumerable<SelectListItem> TypeDropDown = _dbContext.Categories.Select(i => new SelectListItem
+            //{
+            //    Text = i.Name,
+            //    Value = i.Id.ToString()
+            //});
 
             // Way to pass the data from controller to the View
-            ViewBag.TypeDropDown = TypeDropDown;
+            //ViewBag.TypeDropDown = TypeDropDown;
 
-            return View();
+            ExpenseVm expenseVm = new ExpenseVm()
+            {
+                Expense = new Expense(),
+                TypeDropDown = _dbContext.Categories.Select(i => new SelectListItem {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                })
+            };
+
+            return View(expenseVm);
         }
 
         // POST-Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Expense obj)
+        public IActionResult Create(ExpenseVm obj)
         {
             if (ModelState.IsValid)
             {
 
-                _dbContext.Expenses.Add(obj);
+                _dbContext.Expenses.Add(obj.Expense);
                 _dbContext.SaveChanges();
 
                 return RedirectToAction("Index");
