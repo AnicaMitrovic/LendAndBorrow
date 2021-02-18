@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,5 +18,13 @@ namespace LendAndBorrow.Models
        
         [Required]
         public string Name { get; set; }
+
+        // Connection between 2 tables
+        [DisplayName("Expense Category")]
+        public int ExpenseCategoryId { get; set; }
+
+        [ForeignKey("ExpenseType")]
+        public virtual Category ExpenseCategory { get; set; }
+
     }
 }
